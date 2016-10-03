@@ -1,0 +1,9 @@
+{% block content %}
+{% load crispy_forms_tags %}
+
+<h1>Campaña</h1>
+<form method="post">{% csrf_token %}
+    {% crispy form %}  
+    <input type="submit" value="Submit" />
+</form>
+{% endblock content %}
