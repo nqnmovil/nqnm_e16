@@ -52,6 +52,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'encuesta.urls'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates') #agregado basado en rango
 TEMPLATES = [
     {

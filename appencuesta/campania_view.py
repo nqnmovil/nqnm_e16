@@ -24,10 +24,10 @@ class CampaniaForm(ModelForm):
     self.helper.form_method = 'post'
     self.helper.layout = Layout(
       Fieldset('Add a new dataset', 'descripcion', 'fecha_inicio', 'fecha_fin', ),
-      ButtonHolder(
-        Submit('save', 'Submit', css_class='btn btn-primary '),
+      #ButtonHolder(
+      #  Submit('save', 'Submit', css_class='btn btn-primary '),
         #Reset('reset', 'Cancel', css_class='btn')
-        )
+      #  )
     )
     self.helper.add_input(Submit('submit', 'Submit'))
     super(CampaniaForm, self).__init__(*args, **kwargs)
@@ -36,6 +36,7 @@ class CampaniaForm(ModelForm):
     fields = campania_fields
 
 class CampaniaCrear(CreateView):
+    model = Campania
     form_class = CampaniaForm
     #template_name = 'appencuesta/campania_form.html'
     def get_success_url(self):
