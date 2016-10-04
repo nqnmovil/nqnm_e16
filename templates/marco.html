@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Laboratorio Industrial</title>
+  		<!--<meta charset="utf-8">-->
+  		<meta name="viewport" content="width=device-width, initial-scale=1">		
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>	
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>          
+		<link href='https://fonts.googleapis.com/css?family=Dosis:500&effect=outline' rel='stylesheet' type='text/css'>		        
+        
+		<!--
+		<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+		<script src="{% static 'js/locales/bootstrap-datepicker.es.js'%}" charset="UTF-8"></script>
+		
+        <link rel="stylesheet" href="{% static 'css/datepicker.css' %}">        
+        
+		<link rel="stylesheet" href="{% static "css/presupuestos.css" %}">
+		-->
+    </head>
+    <body> 
+		<!-- logo y cerrar sesion -->
+		<div class="row">
+		  <div class="col-xs-2 col-md-2">
+		  <ul class="nav nav-pills nav-stacked">
+			<li class="active"><a href="{% url "appencuesta:index"  %}">Inicio</a></li>
+			<li><a href="{% url "appencuesta:index"  %}">Menu01</a></li>
+			<li class="dropdown">
+			  <a class="dropdown-toggle" data-toggle="dropdown" href="#">opciones<span class="caret"></span></a>
+			  <ul class="dropdown-menu">
+				<li><a href="{% url "appencuesta:index"  %}">opcion 1</a></li>
+				<li><a href="{% url "appencuesta:index"%}">opcion 2</a></li>
+				<li><a href="{% url "appencuesta:index"%}">opcion 3</a></li>
+				<li><a href="{% url "appencuesta:index"%}">opcion 4</a></li>
+			  </ul>
+			</li>
+
+			<li class="dropdown">
+			  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Otras opciones <span class="caret"></span></a>
+			  <ul class="dropdown-menu">
+				<li><a href="{% url "appencuesta:index"  %}">opcion 5</a></li>
+				<li><a href="{% url "appencuesta:index"  %}">opcion 6</a></li>
+			  </ul>
+			</li>      
+		  </ul>
+		  </div>
+		  <div class="col-xs-10 col-md-10">
+			{% block content %}{% endblock content %}	  
+		  </div>
+		</div>	
+	</body>
+</html>
