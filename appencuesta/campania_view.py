@@ -6,6 +6,7 @@ from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse, reverse_lazy
 #from django.db.models import Q #para OR en consultas
 #from django.db.models.deletion import ProtectedError
 #from django.forms import ValidationError
@@ -15,6 +16,9 @@ from django.views.generic import CreateView, DetailView, UpdateView
 #import jsons
 from .models import Campania
 campania_fields = ('descripcion', 'fecha_inicio', 'fecha_fin')
+
+class DateInput(forms.DateInput):
+  input_type = 'date'
 
 class CampaniaForm(ModelForm):
 
@@ -34,13 +38,17 @@ class CampaniaForm(ModelForm):
   class Meta:
     model = Campania
     fields = campania_fields
+    widgets = {
+      'fecha_inicio': DateInput(),
+      'fecha_fin': DateInput(),
+    }
 
 class CampaniaCrear(CreateView):
     model = Campania
     form_class = CampaniaForm
     #template_name = 'appencuesta/campania_form.html'
     def get_success_url(self):
-        return reverse('appencuesta:campania_detalle', kwargs={
+        return reverse('campania_detalle', kwargs={
             'pk': self.object.pk,
         })
 
