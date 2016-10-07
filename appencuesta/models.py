@@ -135,12 +135,12 @@ class Encuesta (models.Model):
   sexo = models.CharField('Sexo',max_length=1, choices=SEXO, blank='true')
   rango_edad = models.CharField('Rango de edad',max_length=2, choices=RANGO_EDAD, blank='true')
   #origen del viaje
-  origen_lugar = models.ForeignKey(Lugar, null='true')
-  origen_motivo = models.ForeignKey(Motivo, null='true')
+  origen_lugar = models.ForeignKey('Lugar de origen',Lugar, related_name='encuesta_origen_lugar', null='true')
+  origen_motivo = models.ForeignKey('Motivo de origen',Motivo,related_name='encuesta_origen_motivo', null='true')
   origen_parada =  models.CharField('Parada de origen (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #destino del viaje
-  destino_lugar = models.ForeignKey(Lugar, null='true')
-  destino_motivo = models.ForeignKey(Motivo, null='true')
+  destino_lugar = models.ForeignKey('Lugar de destino',Lugar,related_name='encuesta_destino_lugar', null='true')
+  destino_motivo = models.ForeignKey('Motivo de destino',Motivo,related_name='encuesta_destino_motivo', null='true')
   origen_parada =  models.CharField('Parada de destino (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #detalles del viaje
   veces_semana = models.CharField('Veces por semana en que realiza este viaje',max_length=6, choices=VECES_SEMANA, blank='true')
