@@ -1,0 +1,10 @@
+[
+{"model": "appencuesta.motivo","pk": 1,"fields": {"nombre": "Hogar"}},
+{"model": "appencuesta.motivo","pk": 2,"fields": {"nombre": "Trabajo"}},
+{"model": "appencuesta.motivo","pk": 3,"fields": {"nombre": "Estudio"}},
+{"model": "appencuesta.motivo","pk": 4,"fields": {"nombre": "Salud"}},
+{"model": "appencuesta.motivo","pk": 5,"fields": {"nombre": "Compras"}},
+{"model": "appencuesta.motivo","pk": 6,"fields": {"nombre": "Trámite"}},
+{"model": "appencuesta.motivo","pk": 7,"fields": {"nombre": "Recreación"}},
+{"model": "appencuesta.motivo","pk": 8,"fields": {"nombre": "Otro"}}
+]

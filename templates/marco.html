@@ -4,51 +4,40 @@
     <head>
         <title>NQN Movilidad</title>
   		<!--<meta charset="utf-8">-->
-  		<meta name="viewport" content="width=device-width, initial-scale=1">		
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>	
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>          
-		<link href='https://fonts.googleapis.com/css?family=Dosis:500&effect=outline' rel='stylesheet' type='text/css'>		        
-        
-		<!--
-		<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
-		<script src="{% static 'js/locales/bootstrap-datepicker.es.js'%}" charset="UTF-8"></script>
-		
-        <link rel="stylesheet" href="{% static 'css/datepicker.css' %}">        
-        
-		<link rel="stylesheet" href="{% static "css/presupuestos.css" %}">
-		-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Dosis:500&effect=outline' rel='stylesheet' type='text/css'>
+
+
     </head>
-    <body> 
+    <body>
 		<!-- logo y cerrar sesion -->
+    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+  	<div class="row">
+          <div class="col-xs-3 col-md-3">
+    	      <!--logo -->
+  	      <a href="{% url "appencuesta:encuesta_listar"  %}"><img src= "{% static "images/logo_nqn_movilidad.png"%}" alt="Logotipo de NQN Movilidad"></a>
+          </div>
+          <div class="col-xs-8 col-md-8"></div>
+          <div class="col-lg-1">
+              <p class="text-left"><strong>{{ user.username }}</strong></p>
+              <p><a href="{% url "appencuesta:logout"  %}" class="btn btn-link">Salir</a></p>
+          </div>
+  	</div>
+
+
 		<div class="row">
 		  <div class="col-xs-2 col-md-2">
 		  <ul class="nav nav-pills nav-stacked">
-			<li class="active"><a href="{% url "index"  %}">Inicio</a></li>
-			<li><a href="{% url "index"  %}">Menu01</a></li>
-			<li class="dropdown">
-			  <a class="dropdown-toggle" data-toggle="dropdown" href="#">opciones<span class="caret"></span></a>
-			  <ul class="dropdown-menu">
-				<li><a href="{% url "index"  %}">opcion 1</a></li>
-				<li><a href="{% url "index"%}">opcion 2</a></li>
-				<li><a href="{% url "index"%}">opcion 3</a></li>
-				<li><a href="{% url "index"%}">opcion 4</a></li>
-			  </ul>
-			</li>
-
-			<li class="dropdown">
-			  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Otras opciones <span class="caret"></span></a>
-			  <ul class="dropdown-menu">
-				<li><a href="{% url "index"  %}">opcion 5</a></li>
-				<li><a href="{% url "index"  %}">opcion 6</a></li>
-			  </ul>
-			</li>      
+			<li><a href="{% url "appencuesta:encuesta_listar"  %}">Encuestas</a></li>
 		  </ul>
 		  </div>
 		  <div class="col-xs-10 col-md-10">
-			{% block content %}{% endblock content %}	  
+			{% block content %}{% endblock content %}
 		  </div>
-		</div>	
+		</div>
 	</body>
 </html>

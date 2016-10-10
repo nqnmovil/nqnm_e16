@@ -1,0 +1,59 @@
+{% extends "marco.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+	<h2>Grupo</h2>
+		<form method="get" action="/appencuesta/encuesta/">
+		<p><label for="id_q">Filtro:</label>
+		<input type="text" name="q" id="id_q" value="{{ query }}" />
+		<input type="submit" value="Buscar" /></p>
+		</form>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+		    <th></th>
+		    <th></th>
+        <th>Encuesta</th>
+
+				<th>Encuestador</th>
+				<th>Parada de encuesta</th>
+				<th>Día</th>
+				<th>Hora inicio</th>
+				<th>Momento</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for encuesta in encuesta_list %}
+	<tr>
+    	<td><a href="{% url "appencuesta:encuesta_modificar" encuesta.id %}" ><img src= "{% static "images/accion_modificar.png"%}" data-toggle="tooltip" data-placement="top" title="Modificar" alt= "Modificar"></a></td>
+    	<td><a href="{% url "appencuesta:encuesta_borrar" encuesta.id %}"><img src= "{% static "images/accion_borrar.png"%}" data-toggle="tooltip" data-placement="top" title="Borrar" alt= "Borrar"></a></td>
+		<td>{{ .nombre }}</td>
+
+		<td>{{ .encuestador  }}</td>
+		<td>{{ .parada_encuesta }}</td>
+		<td>{{ .dia_realizada }}</td>
+		<td>{{ .hora_inicio }}</td>
+		<td>{{ .momento }}</td>
+
+	</tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if is_paginated %}
+      <div class="pagination">
+          <span class="page-links">
+              {% if page_obj.has_previous %}
+                  <a href="/appencuesta/encuesta?q={{query}}&page={{ page_obj.previous_page_number }}">anterior</a>
+              {% endif %}
+              <span class="page-current">
+                  Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+              </span>
+              {% if page_obj.has_next %}
+                  <a href="/appencuesta/encuesta?q={{query}}&page={{ page_obj.next_page_number }}">siguiente</a>
+              {% endif %}
+          </span>
+      </div>
+  {% endif %}
+</div>
+<a href="{% url "appencuesta:encuesta_crear"  %}"><img src= "{% static "images/accion_alta.png"%}" data-toggle="tooltip" data-placement="top" title="Agregar" alt="Agregar"></a>
+{% endblock content %}

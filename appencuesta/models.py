@@ -20,10 +20,14 @@ class Encuestador (models.Model):
 @python_2_unicode_compatible
 class Parada (models.Model):
   numero = models.CharField('Número',max_length=10)
+  def __str__(self):
+    return self.numero
 
 @python_2_unicode_compatible
 class Linea (models.Model):
   nombre = models.CharField('nombre de la línea',max_length=10)
+  def __str__(self):
+    return self.nombre
 
 @python_2_unicode_compatible
 class Lugar (models.Model):
@@ -31,18 +35,26 @@ class Lugar (models.Model):
   ZONA= 'Z'
   HITO = 'H'
   PARADA = 'P'
+  CALLE = 'C'
+  BARRIO = 'B'
   TIPO_LUGAR = (
     (ZONA, 'Zona'),
     (HITO, 'Hito'),
     (PARADA, 'Parada'),
+    (CALLE, 'Calle'),
+    (BARRIO, 'Barrio')
   )
   tipo = models.CharField('Tipo de lugar',max_length=1, choices=TIPO_LUGAR, blank='true')
   nombre = models.CharField('Nombre del lugar',max_length=100)
+  def __str__(self):
+    return self.nombre
 
 @python_2_unicode_compatible
 class Motivo (models.Model):
   nombre = models.CharField('nombre del motivo',max_length=100)
-
+  def __str__(self):
+    return self.nombre
+"""
 @python_2_unicode_compatible
 class Encuesta (models.Model):
   #calidad del servicio
@@ -121,7 +133,29 @@ class Encuesta (models.Model):
     (TAXI_REMIS,'Taxi o Remis'),
     (OTRO,'Otro medio'),
   )
-
+  #Interes en servicios anexos
+  SI = 'SI'
+  NO = 'NO'
+  NO_ME_INTERESA = 'NI'
+  NO_LO_CONOZCO = 'NC'
+  INTERES_SERVICIOS_ANEXOS = (
+    (SI,'Si'),
+    (NO,'No'),
+    (NO_ME_INTERESA,'No me interesa'),
+    (NO_LO_CONOZCO,'No lo conozco'),
+  )
+  #
+  MEJORO_BASTANTE = 'MB'
+  MEJORO_MEDIANAMENTE = 'MM'
+  MEJORO_POCO = 'MP'
+  NO_MEJORO = 'NM'
+  MEJORA_SERVICIO = (
+    (MEJORO_BASTANTE,'Mejoró bastante'),
+    (MEJORO_MEDIANAMENTE,'Mejoró medianamente'),
+    (MEJORO_POCO,'Mejoró poco'),
+    (NO_MEJORO,'No mejoró'),
+    (NS_NC, 'Ns/Nc'),
+  )
   #datos sobre el procedimiento de encuesta
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   encuestador = models.ForeignKey('Encuestador',Encuestador, null='true')
@@ -151,4 +185,13 @@ class Encuesta (models.Model):
   estado_unidad =  models.CharField('Estado general de la unidad',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   comodidad =  models.CharField('Comodidad con la que viaja',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   higiene_unidad =  models.CharField('Higiene de la unidad',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  trato_choferes =  models.CharField('Higiene d',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  trato_choferes =  models.CharField('Trato y atención por parte de choferes',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  conduccion_choferes =  models.CharField('¿Cómo calificaría el desempeño de los choferes en la conducción?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  info_choferes =  models.CharField('¿Cómo calificaría el nivel de información general de los choferes?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  usa_medio_informacion = models.CharField('¿Utiliza algún medio de información de transporte?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
+  usa_trasbordo = models.CharField('¿Utiliza el servicio de trasbordo?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
+  usa_recarga_sube = models.CharField('¿Utiliza el servicio de recarga Sube con tarjeta de crédito?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
+  opinion_servicio = models.CharField('¿En este último tiempo, considera que el servicio brindado por la Empresa?',max_length=2, choices=MEJORA_SERVICIO, default = NS_NC)
+  opinion_trabajo_muni = models.CharField('¿Cómo calificaría el trabajo que está realizando la Municipalidad para el control y mejoramiento del servicio?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  sugerencia = models.CharField('¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
+"""

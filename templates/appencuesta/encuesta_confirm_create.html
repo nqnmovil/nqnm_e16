@@ -1,0 +1,6 @@
+{% extends "marco.html" %}
+{% block content %}
+<h1>Encuesta {{ encuesta }} creada correctamente</h1>
+<p>Encuestador: {{ encuesta.encuestador.usuario.username }}</p>
+<a href="{% url "appencuesta:encuesta_listar"  %}">Encuestas</a>
+{% endblock content %}

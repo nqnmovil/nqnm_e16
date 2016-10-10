@@ -1,0 +1,58 @@
+[
+{"model": "appencuesta.lugar","pk": 1,"fields": {"tipo": "Z","nombre": "Zona Centro"}},
+{"model": "appencuesta.lugar","pk": 2,"fields": {"tipo": "Z","nombre": "Zona Este"}},
+{"model": "appencuesta.lugar","pk": 3,"fields": {"tipo": "Z","nombre": "Zona Norte"}},
+{"model": "appencuesta.lugar","pk": 4,"fields": {"tipo": "Z","nombre": "Zona Oeste"}},
+{"model": "appencuesta.lugar","pk": 5,"fields": {"tipo": "Z","nombre": "Zona Sur"}},
+{"model": "appencuesta.lugar","pk": 8,"fields": {"tipo": "H","nombre": "Zona Bancaria"}},
+{"model": "appencuesta.lugar","pk": 6,"fields": {"tipo": "H","nombre": "Alto Comahue Shopping"}},
+{"model": "appencuesta.lugar","pk": 7,"fields": {"tipo": "H","nombre": "Paseo de la Patagonia Shopping Center"}},
+{"model": "appencuesta.lugar","pk": 8,"fields": {"tipo": "H","nombre": "Shopping Jumbo"}},
+{"model": "appencuesta.lugar","pk": 9,"fields": {"tipo": "H","nombre": "Municipalidad"}},
+{"model": "appencuesta.lugar","pk": 10,"fields": {"tipo": "H","nombre": "Calf Pago de servicios"}},
+{"model": "appencuesta.lugar","pk": 11,"fields": {"tipo": "H","nombre": "Rentas"}},
+{"model": "appencuesta.lugar","pk": 12,"fields": {"tipo": "H","nombre": "Consejo de Educación"}},
+{"model": "appencuesta.lugar","pk": 13,"fields": {"tipo": "H","nombre": "Consejo Deliberante"}},
+{"model": "appencuesta.lugar","pk": 14,"fields": {"tipo": "H","nombre": "Legislatura"}},		
+{"model": "appencuesta.lugar","pk": 15,"fields": {"tipo": "H","nombre": "Universidad Nacional del Comahue"}},	
+	
+{"model": "appencuesta.lugar","pk": 16,"fields": {"tipo": "H","nombre": "Paseo de la costa"}},
+{"model": "appencuesta.lugar","pk": 17,"fields": {"tipo": "H","nombre": "Clubes privados (Santafesino)"}},
+{"model": "appencuesta.lugar","pk": 18,"fields": {"tipo": "H","nombre": "Balneario Gatica"}},
+{"model": "appencuesta.lugar","pk": 19,"fields": {"tipo": "H","nombre": "Balneario La Herradura"}},
+{"model": "appencuesta.lugar","pk": 20,"fields": {"tipo": "H","nombre": "Balneario Isla Verde"}},
+	
+{"model": "appencuesta.lugar","pk": 21,"fields": {"tipo": "H","nombre": "Hospital Castro Rendón"}},
+{"model": "appencuesta.lugar","pk": 22,"fields": {"tipo": "H","nombre": "Hospital Bouquet Roldán"}},
+{"model": "appencuesta.lugar","pk": 23,"fields": {"tipo": "H","nombre": "Hospital Heller"}},
+	
+{"model": "appencuesta.lugar","pk": 24,"fields": {"tipo": "H","nombre": "Policlínico Neuquén"}},
+{"model": "appencuesta.lugar","pk": 25,"fields": {"tipo": "H","nombre": "Cooperativa ADOS"}},
+{"model": "appencuesta.lugar","pk": 26,"fields": {"tipo": "H","nombre": "Clinica Pasteur"}},
+{"model": "appencuesta.lugar","pk": 27,"fields": {"tipo": "H","nombre": "CEMIC"}},
+{"model": "appencuesta.lugar","pk": 28,"fields": {"tipo": "H","nombre": "Laboratorio Raña"}},
+	
+{"model": "appencuesta.lugar","pk": 29,"fields": {"tipo": "P","nombre": "Indique número de parada"}},
+{"model": "appencuesta.lugar","pk": 30,"fields": {"tipo": "C","nombre": "Indique nombre de la calle"}},
+	
+{"model": "appencuesta.lugar","pk": 31,"fields": {"tipo": "B","nombre": "Barrio Gregorio Alvarez"}},
+{"model": "appencuesta.lugar","pk": 32,"fields": {"tipo": "B","nombre": "Barrio La Sirena"}},
+{"model": "appencuesta.lugar","pk": 33,"fields": {"tipo": "B","nombre": "Barrio Confluencia"}},
+{"model": "appencuesta.lugar","pk": 34,"fields": {"tipo": "B","nombre": "Barrio Parque Industrial"}},
+{"model": "appencuesta.lugar","pk": 35,"fields": {"tipo": "B","nombre": "Barrio Valentina Norte"}},
+{"model": "appencuesta.lugar","pk": 36,"fields": {"tipo": "B","nombre": "Barrio Valentina Sur"}},
+{"model": "appencuesta.lugar","pk": 37,"fields": {"tipo": "B","nombre": "Barrio San Lorenzo"}},
+{"model": "appencuesta.lugar","pk": 38,"fields": {"tipo": "B","nombre": "Barrio Gran Neuquén"}},
+{"model": "appencuesta.lugar","pk": 39,"fields": {"tipo": "B","nombre": "Barrio Limay"}},
+{"model": "appencuesta.lugar","pk": 40,"fields": {"tipo": "B","nombre": "Alta Barda"}},
+{"model": "appencuesta.lugar","pk": 41,"fields": {"tipo": "B","nombre": "Barrio 14 de Octubre"}},
+{"model": "appencuesta.lugar","pk": 42,"fields": {"tipo": "B","nombre": "Barrio Rincón de Emilio"}},
+{"model": "appencuesta.lugar","pk": 43,"fields": {"tipo": "B","nombre": "Barrio Militar"}}
+	
+	
+	
+
+
+
+	
+]
