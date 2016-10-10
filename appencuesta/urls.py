@@ -1,7 +1,7 @@
  # -- coding: utf-8 --
 from django.conf.urls import url
 from .campania_view import CampaniaCrear, CampaniaDetalle
-#from .viewencuesta import EncuestaCrear, EncuestaBorrar, EncuestaDetalle, EncuestaConfirmaAlta, EncuestaListar, EncuestaModificar
+from .viewencuesta import EncuestaCrear, EncuestaBorrar, EncuestaDetalle, EncuestaConfirmaAlta, EncuestaListar, EncuestaModificar
 from .viewlogin import user_login, user_logout
 from .views import index
 from django.contrib.auth.decorators import login_required
@@ -23,11 +23,11 @@ urlpatterns = [
     #para texto: (?P<post_id>[\w-]+)
     #para números: (?P<pk>\d+)
 
-    #url(r'^encuesta/$', EncuestaListar.as_view(), name='encuesta_listar'),
-    #url(r'^encuesta/crear/$', EncuestaCrear.as_view(), name='encuesta_crear'),
-    #url(r'^encuesta/(?P<pk>\d+)/$', EncuestaDetalle.as_view(), name='encuesta_detalle'),
-	#url(r'^encuesta/(?P<pk>\d+)/confirmaalta$', EncuestaConfirmaAlta.as_view(), name='encuesta_confirma_alta'),
-    #url(r'^encuesta/(?P<pk>\d+)/modificar/$', EncuestaModificar.as_view(), name='encuesta_modificar'),
-    #url(r'^encuesta/(?P<pk>\d+)/borrar/$', EncuestaBorrar.as_view(), name='encuesta_borrar'),
+    url(r'^encuesta/$', EncuestaListar.as_view(), name='encuesta_listar'),
+    url(r'^encuesta/crear/$', EncuestaCrear.as_view(), name='encuesta_crear'),
+    url(r'^encuesta/(?P<pk>\d+)/$', EncuestaDetalle.as_view(), name='encuesta_detalle'),
+	url(r'^encuesta/(?P<pk>\d+)/confirmaalta$', EncuestaConfirmaAlta.as_view(), name='encuesta_confirma_alta'),
+    url(r'^encuesta/(?P<pk>\d+)/modificar/$', EncuestaModificar.as_view(), name='encuesta_modificar'),
+    url(r'^encuesta/(?P<pk>\d+)/borrar/$', EncuestaBorrar.as_view(), name='encuesta_borrar'),
 
 ]

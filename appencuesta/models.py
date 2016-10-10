@@ -54,7 +54,7 @@ class Motivo (models.Model):
   nombre = models.CharField('nombre del motivo',max_length=100)
   def __str__(self):
     return self.nombre
-"""
+
 @python_2_unicode_compatible
 class Encuesta (models.Model):
   #calidad del servicio
@@ -194,4 +194,3 @@ class Encuesta (models.Model):
   opinion_servicio = models.CharField('¿En este último tiempo, considera que el servicio brindado por la Empresa?',max_length=2, choices=MEJORA_SERVICIO, default = NS_NC)
   opinion_trabajo_muni = models.CharField('¿Cómo calificaría el trabajo que está realizando la Municipalidad para el control y mejoramiento del servicio?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   sugerencia = models.CharField('¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
-"""
