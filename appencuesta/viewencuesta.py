@@ -67,9 +67,8 @@ class EncuestaModificar(UpdateView):
     model = Encuesta
     fields = encuesta_fields
     def get_success_url(self):
-        return reverse('encuesta_detalle', kwargs={
-            'pk': self.object.pk,
-        })
+        return reverse('appencuesta:encuesta_detalle', kwargs={'pk': self.object.pk})
+
 
 class EncuestaBorrar(DeleteView):
     model = Encuesta

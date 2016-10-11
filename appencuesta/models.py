@@ -16,6 +16,8 @@ class Campania (models.Model):
 @python_2_unicode_compatible
 class Encuestador (models.Model):
   usuario = models.ForeignKey(User)
+  def __str__(self):
+    return self.usuario.get_full_name()#self.usuario.first_name
 
 @python_2_unicode_compatible
 class Parada (models.Model):
@@ -157,13 +159,13 @@ class Encuesta (models.Model):
     (NS_NC, 'Ns/Nc'),
   )
   #datos sobre el procedimiento de encuesta
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  #nousar esto: id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   encuestador = models.ForeignKey('Encuestador',Encuestador, null='true')
   parada_encuesta = models.ForeignKey(Parada, null='true')
   cargaonline = models.BooleanField('Encuesta cargada en línea',default=True)
   dia_realizada = models.DateField('fecha de realización', default=date.today)
-  hora_inicio = models.DateTimeField()
-  hora_fin = models.DateTimeField()
+  hora_inicio = models.DateTimeField(blank = 'true')
+  hora_fin = models.DateTimeField(blank = 'true')
   momento = models.CharField('Momento de la encuesta',max_length=2, choices=MOMENTO, blank='true')
   #perfil del usuario
   sexo = models.CharField('Sexo',max_length=1, choices=SEXO, blank='true')
