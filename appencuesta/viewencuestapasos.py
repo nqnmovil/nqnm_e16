@@ -28,7 +28,7 @@ class DateInput(forms.DateInput):
 
 class EncuestaProcedimientoForm(ModelForm):
 
-  def __init__(self,user ,selfpk,*args, **kwargs):
+  def __init__(self,user,*args, **kwargs):
     self.helper = FormHelper()
     self.helper.form_class = 'form-horizontal'
     self.helper.form_method = 'post'
@@ -83,7 +83,7 @@ class EncuestaCrear(LoginRequiredMixin, CreateView):
       current_user = self.request.user
       print (current_user.id)
       kwargs = super(EncuestaCrear, self).get_form_kwargs()
-      kwargs.update({'user': self.request.user,'selfpk':self.object.pk})
+      kwargs.update({'user': self.request.user})
       return kwargs
 
 class EncuestaProcedimiento(LoginRequiredMixin, UpdateView):
@@ -217,7 +217,6 @@ class EncuestaCalidadForm(ModelForm):
         Submit('save', 'Guardar y finalizar', css_class='btn btn-primary '),
       )
     )
-
     super(EncuestaCalidadForm, self).__init__(*args, **kwargs)
 
   class Meta:
