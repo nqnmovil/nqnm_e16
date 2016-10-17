@@ -12,18 +12,26 @@ class Campania (models.Model):
   fecha_fin = models.DateField('Fecha de fin')
   def __str__(self):
     return self.descripcion
+  class Meta:
+    verbose_name = "Campaña"
+    verbose_name_plural = "Campañas"
 
 @python_2_unicode_compatible
 class Encuestador (models.Model):
   usuario = models.ForeignKey(User)
   def __str__(self):
     return self.usuario.get_full_name()#self.usuario.first_name
-
+  class Meta:
+    verbose_name = "Encuestador"
+    verbose_name_plural = "Encuestadores"
 @python_2_unicode_compatible
 class Parada (models.Model):
   numero = models.CharField('Número',max_length=10)
   def __str__(self):
     return self.numero
+  class Meta:
+    verbose_name = "Parada"
+    verbose_name_plural = "Paradas"
 
 @python_2_unicode_compatible
 class Linea (models.Model):
@@ -50,7 +58,9 @@ class Lugar (models.Model):
   nombre = models.CharField('Nombre del lugar',max_length=100)
   def __str__(self):
     return self.nombre
-
+  class Meta:
+    verbose_name = "Lugar"
+    verbose_name_plural = "Lugares"
 @python_2_unicode_compatible
 class Motivo (models.Model):
   nombre = models.CharField('nombre del motivo',max_length=100)
@@ -160,16 +170,16 @@ class Encuesta (models.Model):
   )
   #datos sobre el procedimiento de encuesta
   #nousar esto: id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-  encuestador = models.ForeignKey('Encuestador',Encuestador, null='true')
-  parada_encuesta = models.ForeignKey(Parada, null='true')
+  encuestador = models.ForeignKey('Encuestador',Encuestador, null='true', )
+  parada_encuesta = models.ForeignKey(Parada,verbose_name='Parada', null='true')
   cargaonline = models.BooleanField('Encuesta cargada en línea',default=True)
   dia_realizada = models.DateField('fecha de realización', default=date.today)
-  hora_inicio = models.DateTimeField(blank = 'true')
-  hora_fin = models.DateTimeField(blank = 'true')
-  momento = models.CharField('Momento de la encuesta',max_length=2, choices=MOMENTO, blank='true')
+  hora_inicio = models.DateTimeField(blank = 'true', null = 'true')
+  hora_fin = models.DateTimeField(blank = 'true', null = 'true')
+  momento = models.CharField('Momento de la encuesta',max_length=2, choices=MOMENTO)
   #perfil del usuario
-  sexo = models.CharField('Sexo',max_length=1, choices=SEXO, blank='true')
-  rango_edad = models.CharField('Rango de edad',max_length=2, choices=RANGO_EDAD, blank='true')
+  sexo = models.CharField('Sexo',max_length=1, choices=SEXO)
+  rango_edad = models.CharField('Rango de edad',max_length=2, choices=RANGO_EDAD)
   #origen del viaje
   origen_lugar = models.ForeignKey(Lugar, related_name='encuesta_origen_lugar', null='true')
   origen_motivo = models.ForeignKey(Motivo,related_name='encuesta_origen_motivo', null='true')
@@ -177,11 +187,11 @@ class Encuesta (models.Model):
   #destino del viaje
   destino_lugar = models.ForeignKey(Lugar,related_name='encuesta_destino_lugar', null='true')
   destino_motivo = models.ForeignKey(Motivo,related_name='encuesta_destino_motivo', null='true')
-  origen_parada =  models.CharField('Parada de destino (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
+  destino_parada =  models.CharField('Parada de destino (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #detalles del viaje
-  veces_semana = models.CharField('Veces por semana en que realiza este viaje',max_length=6, choices=VECES_SEMANA, blank='true')
-  veces_dia = models.CharField('Veces por día en que realiza este viaje',max_length=6, choices=VECES_DIA, blank='true')
-  otro_medio = models.CharField('Para completar el viaje usa otro medio de transporte?',max_length=6, choices=OTRO_MEDIO, blank='true')
+  veces_semana = models.CharField('Veces por semana en que realiza este viaje',max_length=6, choices=VECES_SEMANA)
+  veces_dia = models.CharField('Veces por día en que realiza este viaje',max_length=6, choices=VECES_DIA)
+  otro_medio = models.CharField('Para completar el viaje usa otro medio de transporte?',max_length=6, choices=OTRO_MEDIO)
   linea = models.ForeignKey(Linea, null='true')
   #calidad del servicio
   estado_unidad =  models.CharField('Estado general de la unidad',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
@@ -196,3 +206,5 @@ class Encuesta (models.Model):
   opinion_servicio = models.CharField('¿En este último tiempo, considera que el servicio brindado por la Empresa?',max_length=2, choices=MEJORA_SERVICIO, default = NS_NC)
   opinion_trabajo_muni = models.CharField('¿Cómo calificaría el trabajo que está realizando la Municipalidad para el control y mejoramiento del servicio?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   sugerencia = models.CharField('¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
+  def __str__(self):
+    return self.parada_encuesta.numero

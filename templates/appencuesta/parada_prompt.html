@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>NQN Movilidad</title>
+    <head>
+        <title>NQN Movilidad</title>
+  		<!--<meta charset="utf-8">-->
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Dosis:500&effect=outline' rel='stylesheet' type='text/css'>
+    </head>
+<div class="container">
+	<h2>Selección de Parada</h2>
+		<form method="get" action="/appencuesta/paradaprompt/">
+		<p><label for="id_q">Filtro (Número):</label>
+		<input type="text" name="q" id="id_q" value="{{ query }}" />
+		<input type="submit" value="Buscar" /></p>
+		</form>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+		<th></th>
+        <th>Número</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for parada in parada_list %}
+	<tr>
+    	<td><a href="#" onclick="sendValues({{ parada.id }});" ><img src= "{% static "images/accion_elegir.png"%}" data-toggle="tooltip" data-placement="top" title="Seleccionar" alt= "Seleccionar"></a></td>
+		<td>{{ parada.numero }}</td>
+	</tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if is_paginated %}
+      <div class="pagination">
+          <span class="page-links">
+              {% if page_obj.has_previous %}
+                  <a href="/appencuesta/paradaprompt?q={{query}}&page={{ page_obj.previous_page_number }}">anterior</a>
+              {% endif %}
+              <span class="page-current">
+                  Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+              </span>
+              {% if page_obj.has_next %}
+                  <a href="/appencuesta/paradaprompt?q={{query}}&page={{ page_obj.next_page_number }}">siguiente</a>
+              {% endif %}
+          </span>
+      </div>
+  {% endif %}
+</div>
+
+<script type="text/javascript">
+ function sendValues(idparada){
+ opener.window.document.getElementById('id_parada_encuesta').value = idparada
+
+ window.close();
+ }
+</script>

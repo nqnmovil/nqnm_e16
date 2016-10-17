@@ -26,7 +26,7 @@ def user_login(request):
 			if user.is_active:
 				#Si el usuario es válido y activo, podemos loguearlo
 				login(request,user)
-				return HttpResponseRedirect( reverse('encuesta_listar') )
+				return HttpResponseRedirect( reverse('appencuesta:encuesta_listar') )
 			else:
 				context = Context({"mensaje": "Su cuenta se encuentra desactivada"})
 				return render(request, 'appencuesta/login.html', context)
@@ -44,4 +44,4 @@ def user_logout(request):
     print(request.session)
     logout(request)
     # Take the user back to the homepage.
-    return HttpResponseRedirect(reverse('login') )
+    return HttpResponseRedirect(reverse('appencuesta:login') )

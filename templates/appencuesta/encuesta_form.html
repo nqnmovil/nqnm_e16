@@ -1,8 +1,5 @@
 {% extends "marco.html" %}
 {% block content %}
-<h1>Encuesta</h1>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Confirmar" />
-</form>
+{% load crispy_forms_tags %}
+{% crispy form %}
 {% endblock content %}

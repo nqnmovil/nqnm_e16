@@ -11,29 +11,31 @@
     <link rel="stylesheet" href="{% static 'css/signin.css' %}">
   </head>
   <body>
-    <div class="container">
-      <form id="login_form" method="post" action="/appencuesta/login/" class="form-signin">
-				<div class="row">
-			<!--logo -->
-			<div class="text-center">
-			<img src= "{% static "images/logo_nqn_movilidad.png"%}" alt="Logotipo de NQN Movilidad">
-			</div>
-		</div>
-        <h3 class="form-signin-heading">Por favor ingrese sus credenciales</h3>
-		{% if mensaje  %}
-		  <div class="alert alert-danger" role="alert">
-		  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			  <span class="sr-only">¡Atención!</span>{{mensaje}}
-		  </div>
-        {% endif %}
-        <label for="username" class="sr-only">Usuario</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required autofocus>
-        <label for="password" class="sr-only">Clave</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Clave" required>
-        <div class="checkbox">
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
-      </form>
-    </div> <!-- /container -->
+        <form id="login_form" method="post" action="/appencuesta/login/" class="form-signin">
+          <div class="row">
+            <div class="col-md-9 col-sm-3 col-xs-2">
+              <div class="text-center">
+                <img class="img-responsive" src= "{% static "images/logo_nqn_movilidad.png"%}" alt="Logotipo de NQN Movilidad">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-md-12 col-sm-5">
+              <h3 class="form-signin-heading">Por favor ingrese sus credenciales</h3>
+      		    {% if mensaje  %}
+      		    <div class="alert alert-danger" role="alert">
+      		      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      			    <span class="sr-only">¡Atención!</span>{{mensaje}}
+      		    </div>
+              {% endif %}
+              <label for="username" class="sr-only">Usuario</label>
+              <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required autofocus>
+              <label for="password" class="sr-only">Clave</label>
+              <input type="password" id="password" name="password" class="form-control" placeholder="Clave" required>
+              <div class="checkbox">
+              </div>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+          </div>
+        </form>
   </body>
 <html>

@@ -8,7 +8,7 @@ from django.db.models.deletion import ProtectedError
 from django.forms import ValidationError
 
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
+from django.views.generic import DetailView, ListView, DeleteView
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -17,10 +17,9 @@ encuesta_fields = (
 'parada_encuesta',
 'cargaonline',
 'dia_realizada',
-'hora_inicio',
 'momento',
 )
-#perfil del usuario
+
 from .models import Encuesta
 
 class EncuestaListar(LoginRequiredMixin, ListView):
@@ -45,45 +44,16 @@ class EncuestaListar(LoginRequiredMixin, ListView):
             context['query'] = q
         return context
 
-class EncuestaCrear(LoginRequiredMixin, CreateView):
-    model = Encuesta
-    fields = encuesta_fields
-
-    def get_success_url(self):
-        return reverse('encuesta_confirma_alta', kwargs={
-            'pk': self.object.pk,
-        })
-
 class EncuestaDetalle(LoginRequiredMixin, DetailView):
     model = Encuesta
     fields = encuesta_fields
 
 class EncuestaConfirmaAlta(LoginRequiredMixin, DetailView):
-    template_name = 'apppresupuestos/encuesta_confirm_create.html'
+    template_name = 'appencuesta/encuesta_confirm_create.html'
     model = Encuesta
     fields = encuesta_fields
-
-class EncuestaModificar(UpdateView):
-    model = Encuesta
-    fields = encuesta_fields
-    def get_success_url(self):
-        return reverse('appencuesta:encuesta_detalle', kwargs={'pk': self.object.pk})
-
 
 class EncuestaBorrar(DeleteView):
     model = Encuesta
-    success_url = reverse_lazy('encuesta_listar')
+    success_url = reverse_lazy('appencuesta:encuesta_listar')
     fields = encuesta_fields
-
-    def delete(self, request, *args, **kwargs):
-        encuesta = self.get_object()
-
-        try:
-            encuesta.delete()
-            estado = 'Encuesta eliminada correctamente'
-        except ValidationError as e:
-            estado = 'Objeto protegido.' + str(e)
-        respuesta = estado
-
-        return render(request, 'appencuesta/confirmar_borrado.html',{"respuesta":respuesta })
-        #return HttpResponse(respuesta   )
