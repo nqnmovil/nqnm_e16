@@ -27,21 +27,37 @@ class EncuestaListar(LoginRequiredMixin, ListView):
     paginate_by = 10
 
     #búsqueda
-
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query is None:
-            return Encuesta.objects.all().order_by('dia_realizada')
-        else:
-            return Encuesta.objects.filter( Q(encuestador__usuario__username__icontains=query)).order_by('nombre')
 
+        query_ape = self.request.GET.get('filtro_ape')
+        query_nom = self.request.GET.get('filtro_nom')
+        query_num = self.request.GET.get('filtro_num')
+        if query_ape is None:
+            qs = Encuesta.objects.all().order_by('id')
+        else:
+            qs = Encuesta.objects.filter( Q(encuestador__usuario__last_name__icontains=query_ape)).order_by('id')
+        if not(query_nom is None):
+            qs = qs.filter(encuestador__usuario__first_name__icontains=query_nom)
+        if not(query_num is None or query_num == ''):
+            qs = qs.filter(id=query_num)
+
+        return qs
     #almacenar contexto de la búsqueda
     def get_context_data(self, **kwargs):
         context = super(EncuestaListar, self).get_context_data(**kwargs)
-        q = self.request.GET.get('q')
-        if q: #si existe el valor, lo agrego/actualizo en el contexto
-            q = q.replace(" ","+")
-            context['query'] = q
+        filtro_ape = self.request.GET.get('filtro_ape')
+        if filtro_ape: #si existe el valor, lo agrego/actualizo en el contexto
+            filtro_ape = filtro_ape.replace(" ","+")
+            context['filtro_ape'] = filtro_ape
+        filtro_nom = self.request.GET.get('filtro_nom')
+        if filtro_nom: #si existe el valor, lo agrego/actualizo en el contexto
+            filtro_nom = filtro_nom.replace(" ","+")
+            context['filtro_nom'] = filtro_nom
+        filtro_num = self.request.GET.get('filtro_num')
+        if filtro_num: #si existe el valor, lo agrego/actualizo en el contexto
+            filtro_num = filtro_num.replace(" ","+")
+            context['filtro_num'] = filtro_num
+
         return context
 
 class EncuestaDetalle(LoginRequiredMixin, DetailView):

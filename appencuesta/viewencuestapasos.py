@@ -206,6 +206,7 @@ class EncuestaCalidadForm(ModelForm):
         'usa_recarga_sube',
       ),
       Fieldset(
+        'Opiniones',
         'opinion_servicio',
         'opinion_trabajo_muni',
         'sugerencia',
