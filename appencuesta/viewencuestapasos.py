@@ -28,46 +28,53 @@ class DateInput(forms.DateInput):
 
 class EncuestaProcedimientoForm(ModelForm):
 
-  def __init__(self,user, selfpk, *args, **kwargs):
+  def __init__(self,user, selfpk, modo, *args, **kwargs):
+
+    if modo == 'INS': #al crear activo el prompot
+      html_link_paradas = '<a href="#" onclick="showModal();" >Buscar parada</a>'
+      html_prompt_paradas = """
+          <script type="text/javascript">
+            function showModal()
+            {
+              var dialogWin = window.open('{% url "appencuesta:parada_prompt"  %}', "dialogwidth: 450px; dialogheight: 300px; resizable: yes"); // Showing the Modal Dialog
+            }
+          </script>
+      """
+    else:
+      html_prompt_paradas = ""
+      html_link_paradas = ""
+
     self.helper = FormHelper()
     self.helper.form_class = 'form-horizontal'
     self.helper.form_method = 'post'
     self.helper.layout = Layout(
       Div(
-        HTML('<legend>Procedimiento de encuesta</legend>')
+        HTML(html_link_paradas)
         ),
         Field('encuestador',css_class = 'col-lg-6 col-md-5 col-sm-3 col-xs-2'),
         Field('parada_encuesta'),
-        HTML("""
-          <a href="#" onclick="showModal();" >Buscar parada</a>
-        """),
+        HTML(html_link_paradas),
         Field('cargaonline'),
         #'dia_realizada' #para cuando se deba editar
         Field('dia_realizada', id='id_dia_realizada',readonly='readonly',template='appencuesta/util/datepicker_fecha.html'),
         Field('momento'),
-
         FormActions(
           StrictButton('Volver sin guardar',
           onclick="location.href='"+reverse('appencuesta:encuesta_listar',)+"'",
           name="volver",value='volver a listado' , css_class="extra"),
           Submit('save', 'Guardar y seguir', css_class='btn btn-primary '),
         ),
-        HTML("""
-        </script>
-        <script type="text/javascript">
-          function showModal()
-          {
-            var dialogWin = window.open('{% url "appencuesta:parada_prompt"  %}', "dialogwidth: 450px; dialogheight: 300px; resizable: yes"); // Showing the Modal Dialog
-          }
-        </script>
-      """)
-
+        HTML(html_prompt_paradas)
     )
     super(EncuestaProcedimientoForm, self).__init__(*args, **kwargs)
     #busco el encuestador asociado al current user
     encuestador = Encuestador.objects.get(usuario__id = user.id)
     self.fields['encuestador'].queryset= Encuestador.objects.filter(id=encuestador.id)
     self.fields['encuestador'].initial = encuestador
+    if modo == 'UPD': #si actualiza deshabilitar campos para evitar inconsistencia
+      self.helper['parada_encuesta'].wrap(Field, readonly='readonly')
+      self.helper['momento'].wrap(Field, readonly='readonly')
+
   class Meta:
     model = Encuesta
     fields = encuesta_procedimiento_fields
@@ -81,9 +88,12 @@ class EncuestaCrear(LoginRequiredMixin, CreateView):
         return reverse('appencuesta:encuesta_perfil', kwargs={'pk': self.object.pk,}) #va a paso2
     def get_form_kwargs(self):
       current_user = self.request.user
-      print (current_user.id)
       kwargs = super(EncuestaCrear, self).get_form_kwargs()
-      kwargs.update({'user': self.request.user,'selfpk':0}) #pk= 0 todavía no existe
+      kwargs.update({
+        'user': self.request.user,
+        'selfpk':0,
+        'modo': 'INS'
+        }) #pk= 0 todavía no existe
       return kwargs
 
 class EncuestaProcedimiento(LoginRequiredMixin, UpdateView):
@@ -98,9 +108,12 @@ class EncuestaProcedimiento(LoginRequiredMixin, UpdateView):
     def get_form_kwargs(self):
       usuarioAlta = self.object.encuestador.usuario
       #current_user = usuarioAlta #self.request.user
-      print (usuarioAlta)
       kwargs = super(EncuestaProcedimiento, self).get_form_kwargs()
-      kwargs.update({'user': usuarioAlta,'selfpk':self.object.pk})
+      kwargs.update({
+      'user': usuarioAlta,
+      'selfpk':self.object.pk,
+      'modo':'UPD'
+      })
       return kwargs
 
 
@@ -117,7 +130,7 @@ encuesta_perfil_fieldSet = ('Perfil del usuario',) + encuesta_perfil_fields
 
 class EncuestaPerfilForm(ModelForm):
 
-  def __init__(self,user, selfpk, *args, **kwargs):
+  def __init__(self,user, selfpk,origenfijo, *args, **kwargs):
     self.helper = FormHelper()
     self.helper.form_class = 'form-horizontal'
     self.helper.form_method = 'post'
@@ -149,6 +162,16 @@ class EncuestaPerfilForm(ModelForm):
         Submit('save', 'Guardar y seguir', css_class='btn btn-primary '),
       ),
     )
+    #origen_lugar
+    #ok anda --> self.helper['origen_lugar'].wrap(Field, readonly='readonly')
+    #ok anda --> print(self.helper.layout[1][0]) #= Div('field_1')
+    if origenfijo:
+      #self.helper.layout[1][0] = Field('origen_lugar', disabled='disabled')
+      self.helper['origen_lugar'].wrap(Field, readonly='readonly')
+      self.helper['origen_parada'].wrap(Field, readonly='readonly')
+    else:
+      self.helper['destino_lugar'].wrap(Field, readonly='readonly')
+      self.helper['destino_parada'].wrap(Field, readonly='readonly')
     super(EncuestaPerfilForm, self).__init__(*args, **kwargs)
 
   class Meta:
@@ -165,9 +188,14 @@ class EncuestaPerfil(UpdateView):
     def get_form_kwargs(self):
       usuarioAlta = self.object.encuestador.usuario
       #current_user = usuarioAlta #self.request.user
-      print (usuarioAlta)
+      print('ssss')
+      print(self.object.origenfijo() )
       kwargs = super(EncuestaPerfil, self).get_form_kwargs()
-      kwargs.update({'user': usuarioAlta,'selfpk':self.object.pk})
+      kwargs.update({
+        'user': usuarioAlta,
+        'selfpk':self.object.pk,
+        'origenfijo': self.object.origenfijo()
+      })
       return kwargs
 
 
@@ -177,7 +205,7 @@ encuesta_calidad_fields = (
 'estado_unidad', 'comodidad', 'higiene_unidad',
 'trato_choferes', 'conduccion_choferes', 'info_choferes',
 'usa_medio_informacion',
-'usa_trasbordo', 'usa_recarga_sube',
+'usa_trasbordo',
 'opinion_servicio', 'opinion_trabajo_muni',
 'sugerencia',
 )
@@ -203,7 +231,6 @@ class EncuestaCalidadForm(ModelForm):
       Fieldset('Servicios anexos',
         'usa_medio_informacion',
         'usa_trasbordo',
-        'usa_recarga_sube',
       ),
       Fieldset(
         'Opiniones',
@@ -234,7 +261,6 @@ class EncuestaCalidad(UpdateView):
     def get_form_kwargs(self):
       usuarioAlta = self.object.encuestador.usuario
       #current_user = usuarioAlta #self.request.user
-      print (usuarioAlta)
       kwargs = super(EncuestaCalidad, self).get_form_kwargs()
       kwargs.update({'user': usuarioAlta,'selfpk':self.object.pk})
       return kwargs

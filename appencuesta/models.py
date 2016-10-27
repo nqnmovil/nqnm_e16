@@ -4,6 +4,25 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import date
 from django.utils.encoding import python_2_unicode_compatible
+from django.db.models.query import QuerySet
+
+""" constantes """
+#momento de la encuesta
+ANTES_ASCENDER = 'AA'
+LUEGO_DESCENDER = 'LD'
+
+PARADA = 'P' #tipos de Lugares.parada
+
+class ActivosQuerySet(QuerySet):
+    def delete(self):
+        self.update(activo=False)
+
+class AdministrarActivos(models.Manager):
+    def activo(self):
+        return self.model.objects.filter(activo=True)
+
+    def get_queryset(self):
+        return ActivosQuerySet(self.model, using=self._db)
 
 @python_2_unicode_compatible
 class Campania (models.Model):
@@ -152,11 +171,26 @@ class Encuesta (models.Model):
   NO_LO_CONOZCO = 'NC'
   INTERES_SERVICIOS_ANEXOS = (
     (SI,'Si'),
-    (NO,'No'),
-    (NO_ME_INTERESA,'No me interesa'),
-    (NO_LO_CONOZCO,'No lo conozco'),
+    (NO_ME_INTERESA,'No. No me interesa'),
+    (NO_LO_CONOZCO,'No. No lo conozco'),
   )
-  #
+  #medios de información de transporte
+
+  CARTELES_INTELIGENTES ='CI'
+  APP_CEL_CUANDO_PASA = 'CP'
+  MENSAJE_TEXTO = 'MT'
+  WEB_MUNICIPAL = 'WM'
+  CONSULTAS_TELEFONICAS = 'CT'
+  USA_MEDIOS_INFORMACION = (
+    (NO_ME_INTERESA,'No. No me interesa'),
+    (NO_LO_CONOZCO,'No. No lo conozco'),
+    (CARTELES_INTELIGENTES,'Si. Carteles de información LED'),
+    (APP_CEL_CUANDO_PASA,'Si. Aplicación móvil Cuando Pasa'),
+    (MENSAJE_TEXTO,'Si. Mensaje de texto'),
+    (WEB_MUNICIPAL,'Si. Página web de la Municipalidad'),
+    (CONSULTAS_TELEFONICAS,'Si. Consultas telefónicas'),
+  )
+  #opinión mejora en servicio
   MEJORO_BASTANTE = 'MB'
   MEJORO_MEDIANAMENTE = 'MM'
   MEJORO_POCO = 'MP'
@@ -168,6 +202,7 @@ class Encuesta (models.Model):
     (NO_MEJORO,'No mejoró'),
     (NS_NC, 'Ns/Nc'),
   )
+
   #datos sobre el procedimiento de encuesta
   #nousar esto: id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   encuestador = models.ForeignKey('Encuestador',Encuestador, null='true', )
@@ -182,6 +217,7 @@ class Encuesta (models.Model):
   rango_edad = models.CharField('Rango de edad',max_length=2, choices=RANGO_EDAD)
   #origen del viaje
   origen_lugar = models.ForeignKey(Lugar, related_name='encuesta_origen_lugar', null='true')
+
   origen_motivo = models.ForeignKey(Motivo,related_name='encuesta_origen_motivo', null='true')
   origen_parada =  models.CharField('Parada de origen (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #destino del viaje
@@ -200,11 +236,33 @@ class Encuesta (models.Model):
   trato_choferes =  models.CharField('Trato y atención por parte de choferes',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   conduccion_choferes =  models.CharField('¿Cómo calificaría el desempeño de los choferes en la conducción?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   info_choferes =  models.CharField('¿Cómo calificaría el nivel de información general de los choferes?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  usa_medio_informacion = models.CharField('¿Utiliza algún medio de información de transporte?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
+  usa_medio_informacion = models.CharField('¿Utiliza algún medio de información de transporte?',max_length=2, choices=USA_MEDIOS_INFORMACION, default = NO_LO_CONOZCO)
   usa_trasbordo = models.CharField('¿Utiliza el servicio de trasbordo?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
-  usa_recarga_sube = models.CharField('¿Utiliza el servicio de recarga Sube con tarjeta de crédito?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
+  #paraHacer:tarjeta de transbordo
   opinion_servicio = models.CharField('¿En este último tiempo, considera que el servicio brindado por la Empresa?',max_length=2, choices=MEJORA_SERVICIO, default = NS_NC)
   opinion_trabajo_muni = models.CharField('¿Cómo calificaría el trabajo que está realizando la Municipalidad para el control y mejoramiento del servicio?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   sugerencia = models.CharField('¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
+  activo = models.BooleanField('Encuesta activa',default=True)
+
   def __str__(self):
     return self.parada_encuesta.numero
+  #sólo permito borrado lógico, también proveo lista de encuestas activas
+  objects = AdministrarActivos()
+  def delete(self):
+    self.activo = False
+    self.save()
+
+  def save(self, *args, **kwargs):
+    #si es insert (id= 0), asignar referencia autoincremental
+    if self.id is None:
+      unaparada = Lugar.objects.get(tipo = PARADA) #debe haber un solo Lugar de tipo PARADA
+      #Valores por defecto de paradas de origen y destino
+      self.origen_parada = self.parada_encuesta.numero if self.momento == ANTES_ASCENDER else '' #Si se releva al subir, uso la parada de la encuesta como origen
+      self.origen_lugar = unaparada if self.momento == ANTES_ASCENDER else None
+      self.destino_parada = self.parada_encuesta.numero if self.momento == LUEGO_DESCENDER else '' #Si se releva al bajar, uso la parada de la encuesta como destino
+      self.destino_lugar = unaparada if self.momento == LUEGO_DESCENDER else None
+
+    super(Encuesta, self).save(*args, **kwargs) # Call the "real" save() method.
+
+  def origenfijo(self): #el lugar y parada de origen no se pueden modificar
+    return True if self.momento == ANTES_ASCENDER else False

@@ -22,5 +22,6 @@
 {"model": "appencuesta.linea","pk": 21,"fields": {"nombre": "404"}},
 {"model": "appencuesta.linea","pk": 22,"fields": {"nombre": "501"}},
 {"model": "appencuesta.linea","pk": 23,"fields": {"nombre": "502"}},
-{"model": "appencuesta.linea","pk": 24,"fields": {"nombre": "516"}}
+{"model": "appencuesta.linea","pk": 24,"fields": {"nombre": "516"}},
+{"model": "appencuesta.linea","pk": 25,"fields": {"nombre": "18"}}
 ]

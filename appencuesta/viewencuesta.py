@@ -33,9 +33,9 @@ class EncuestaListar(LoginRequiredMixin, ListView):
         query_nom = self.request.GET.get('filtro_nom')
         query_num = self.request.GET.get('filtro_num')
         if query_ape is None:
-            qs = Encuesta.objects.all().order_by('id')
+            qs = Encuesta.objects.activo().order_by('id') #antes .all()
         else:
-            qs = Encuesta.objects.filter( Q(encuestador__usuario__last_name__icontains=query_ape)).order_by('id')
+            qs = Encuesta.objects.activo().filter( Q(encuestador__usuario__last_name__icontains=query_ape)).order_by('id')
         if not(query_nom is None):
             qs = qs.filter(encuestador__usuario__first_name__icontains=query_nom)
         if not(query_num is None or query_num == ''):
