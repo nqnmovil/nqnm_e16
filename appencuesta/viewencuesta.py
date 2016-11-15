@@ -32,10 +32,17 @@ class EncuestaListar(LoginRequiredMixin, ListView):
         query_ape = self.request.GET.get('filtro_ape')
         query_nom = self.request.GET.get('filtro_nom')
         query_num = self.request.GET.get('filtro_num')
+        qs = Encuesta.objects.activo().order_by('-id') #antes .all()
+        #muestro sólo las encuestas del usuario logueado
+        current_user = self.request.user
+        print(current_user)
+        qs = qs.filter(encuestador__usuario = current_user)
         if query_ape is None:
-            qs = Encuesta.objects.activo().order_by('id') #antes .all()
+            """
+            no aplico filtros
+            """
         else:
-            qs = Encuesta.objects.activo().filter( Q(encuestador__usuario__last_name__icontains=query_ape)).order_by('id')
+            qs = qs.filter( Q(encuestador__usuario__last_name__icontains=query_ape)).order_by('-id')
         if not(query_nom is None):
             qs = qs.filter(encuestador__usuario__first_name__icontains=query_nom)
         if not(query_num is None or query_num == ''):

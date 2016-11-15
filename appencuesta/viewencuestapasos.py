@@ -40,9 +40,18 @@ class EncuestaProcedimientoForm(ModelForm):
             }
           </script>
       """
+      html_inhabilitar_select = ''
     else:
       html_prompt_paradas = ""
       html_link_paradas = ""
+      #al modificar inactivo parada, y momento de encuesta
+      html_inhabilitar_select = """
+        <script type="text/javascript">
+          $('#id_parada_encuesta option:not(:selected)').attr('disabled',true);
+          $('#id_momento option:not(:selected)').attr('disabled',true);
+        </script>
+      """
+
 
     self.helper = FormHelper()
     self.helper.form_class = 'form-horizontal'
@@ -64,7 +73,8 @@ class EncuestaProcedimientoForm(ModelForm):
           name="volver",value='volver a listado' , css_class="extra"),
           Submit('save', 'Guardar y seguir', css_class='btn btn-primary '),
         ),
-        HTML(html_prompt_paradas)
+        HTML(html_prompt_paradas),
+        HTML(html_inhabilitar_select)
     )
     super(EncuestaProcedimientoForm, self).__init__(*args, **kwargs)
     #busco el encuestador asociado al current user
@@ -129,8 +139,21 @@ encuesta_perfil_fields = (
 encuesta_perfil_fieldSet = ('Perfil del usuario',) + encuesta_perfil_fields
 
 class EncuestaPerfilForm(ModelForm):
-
   def __init__(self,user, selfpk,origenfijo, *args, **kwargs):
+
+    if origenfijo:
+      html_inhabilitar_select = """
+        <script type="text/javascript">
+          $('#id_origen_lugar option:not(:selected)').attr('disabled',true);
+        </script>
+      """
+    else:
+      html_inhabilitar_select = """
+        <script type="text/javascript">
+          $('#id_destino_lugar option:not(:selected)').attr('disabled',true);
+        </script>
+      """
+
     self.helper = FormHelper()
     self.helper.form_class = 'form-horizontal'
     self.helper.form_method = 'post'
@@ -161,6 +184,7 @@ class EncuestaPerfilForm(ModelForm):
           name="volver",value='volver a procedimiento' , css_class="extra"),
         Submit('save', 'Guardar y seguir', css_class='btn btn-primary '),
       ),
+      HTML(html_inhabilitar_select),
     )
     #origen_lugar
     #ok anda --> self.helper['origen_lugar'].wrap(Field, readonly='readonly')
@@ -188,7 +212,6 @@ class EncuestaPerfil(UpdateView):
     def get_form_kwargs(self):
       usuarioAlta = self.object.encuestador.usuario
       #current_user = usuarioAlta #self.request.user
-      print('ssss')
       print(self.object.origenfijo() )
       kwargs = super(EncuestaPerfil, self).get_form_kwargs()
       kwargs.update({
