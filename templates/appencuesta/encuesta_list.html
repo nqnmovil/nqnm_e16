@@ -19,11 +19,13 @@
 		    <th></th>
 		    <th></th>
         <th>Encuesta</th>
+				<th>Referencia</th>
 
 				<th>Encuestador</th>
 				<th>Parada de encuesta</th>
 				<th>Día</th>
-				<th>Momento</th>
+				<th>Hora</th>
+
       </tr>
     </thead>
     <tbody>
@@ -32,10 +34,11 @@
     <td><a href="{% url "appencuesta:encuesta_procedimiento" encuesta.id %}" ><img src= "{% static "images/accion_modificar.png"%}" data-toggle="tooltip" data-placement="top" title="Modificar" alt= "Modificar"></a></td>
     <td><a href="{% url "appencuesta:encuesta_borrar" encuesta.id %}"><img src= "{% static "images/accion_borrar.png"%}" data-toggle="tooltip" data-placement="top" title="Borrar" alt= "Borrar"></a></td>
 		<td>{{ encuesta.id  }}</td>
+		<td>{{ encuesta.referencia  }}</td>
 		<td>{{ encuesta.encuestador  }}</td>
 		<td>{{ encuesta.parada_encuesta }}</td>
 		<td>{{ encuesta.dia_realizada }}</td>
-		<td>{{ .momento }}</td>
+		<td>{{ encuesta.hora_realizada }}</td>
 
 	</tr>
     {% endfor %}

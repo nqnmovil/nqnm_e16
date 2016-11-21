@@ -16,10 +16,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 encuesta_procedimiento_fields = (
 'encuestador','parada_encuesta','cargaonline',
-'dia_realizada','momento',
+'dia_realizada','hora_realizada','momento',
 )
 encuesta_procedimiento_fieldSet = ('Procedimiento de encuesta','encuestador','parada_encuesta','cargaonline',
-'dia_realizada','momento') #('Procedimiento de encuesta',) + encuesta_procedimiento_fields
+'dia_realizada','hora_realizada','momento') #('Procedimiento de encuesta',) + encuesta_procedimiento_fields
 
 from .models import Encuesta
 from .models import Encuestador
@@ -65,7 +65,9 @@ class EncuestaProcedimientoForm(ModelForm):
         HTML(html_link_paradas),
         Field('cargaonline'),
         #'dia_realizada' #para cuando se deba editar
-        Field('dia_realizada', id='id_dia_realizada',readonly='readonly',template='appencuesta/util/datepicker_fecha.html'),
+        #Field('dia_realizada', id='id_dia_realizada',readonly='readonly',template='appencuesta/util/datepicker_fecha.html'),
+        Field('dia_realizada', id='id_dia_realizada',template='appencuesta/util/datepicker_fecha.html'),
+        Field('hora_realizada'),
         Field('momento'),
         FormActions(
           StrictButton('Volver sin guardar',
@@ -130,6 +132,7 @@ class EncuestaProcedimiento(LoginRequiredMixin, UpdateView):
 
 """ Perfil del usuario """
 encuesta_perfil_fields = (
+'referencia',
 'sexo','rango_edad',
 'origen_lugar','origen_motivo','origen_parada',
 'destino_lugar','destino_motivo','destino_parada',
@@ -158,6 +161,7 @@ class EncuestaPerfilForm(ModelForm):
     self.helper.form_class = 'form-horizontal'
     self.helper.form_method = 'post'
     self.helper.layout = Layout(
+      Field('referencia', readonly='readonly'),
       Fieldset('Perfil del usuario',
         'sexo',
         'rango_edad',
@@ -229,6 +233,7 @@ encuesta_calidad_fields = (
 'trato_choferes', 'conduccion_choferes', 'info_choferes',
 'usa_medio_informacion',
 'usa_trasbordo',
+'sube_beneficios',
 'opinion_servicio', 'opinion_trabajo_muni',
 'sugerencia',
 )
@@ -254,6 +259,7 @@ class EncuestaCalidadForm(ModelForm):
       Fieldset('Servicios anexos',
         'usa_medio_informacion',
         'usa_trasbordo',
+        'sube_beneficios',
       ),
       Fieldset(
         'Opiniones',
