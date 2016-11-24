@@ -2,6 +2,7 @@
 {% block content %}
 <h1>Encuesta {{ encuesta}} creada correctamente</h1>
 
-<p>Nombre: {{ encuesta.encuestador.usuario.username }}</p>
+<p>Usuario: {{ encuesta.encuestador.usuario.username }}</p>
+<p>Realizada: {{encuesta.dia_realizada}} {{encuesta.hora_realizada}}</p>
 <a href="{% url "appencuesta:encuesta_listar"  %}">Encuestas</a>
 {% endblock content %}

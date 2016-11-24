@@ -151,7 +151,7 @@ class Encuesta (models.Model):
 
   #datos sobre el procedimiento de encuesta
   #nousar esto: id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-  referencia = models.CharField(max_length=10,blank='true') #autoincremental
+  referencia = models.CharField('Número de encuesta',max_length=10,blank='true') #autoincremental
   encuestador = models.ForeignKey('Encuestador',Encuestador, null='true', )
   parada_encuesta = models.ForeignKey(Parada,verbose_name='Parada', null='true')
   cargaonline = models.BooleanField('Encuesta cargada en línea',default=True)

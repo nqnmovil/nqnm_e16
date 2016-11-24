@@ -5,7 +5,7 @@
 	<h2>Encuestas</h2>
 		<form method="get" action="/appencuesta/encuesta/">
 		<p><label for="id_filtro_num">Número de encuesta:</label>
-		<input type="number" name="filtro_num" id="id_filtro_num" value="{{ filtro_num }}" /></p>
+		<input type="text" name="filtro_num" id="id_filtro_num" value="{{ filtro_num }}" /></p>
 		<p><label for="id_filtro_ape">Apellido del encuestador:</label>
 		<input type="text" name="filtro_ape" id="id_filtro_ape" value="{{ filtro_ape }}" /></p>
 		<p><label for="id_filtro_ape">Nombre del encuestador:</label>
@@ -18,9 +18,7 @@
       <tr>
 		    <th></th>
 		    <th></th>
-        <th>Encuesta</th>
-				<th>Referencia</th>
-
+				<th>Número</th>
 				<th>Encuestador</th>
 				<th>Parada de encuesta</th>
 				<th>Día</th>
@@ -33,7 +31,6 @@
 	<tr>
     <td><a href="{% url "appencuesta:encuesta_procedimiento" encuesta.id %}" ><img src= "{% static "images/accion_modificar.png"%}" data-toggle="tooltip" data-placement="top" title="Modificar" alt= "Modificar"></a></td>
     <td><a href="{% url "appencuesta:encuesta_borrar" encuesta.id %}"><img src= "{% static "images/accion_borrar.png"%}" data-toggle="tooltip" data-placement="top" title="Borrar" alt= "Borrar"></a></td>
-		<td>{{ encuesta.id  }}</td>
 		<td>{{ encuesta.referencia  }}</td>
 		<td>{{ encuesta.encuestador  }}</td>
 		<td>{{ encuesta.parada_encuesta }}</td>

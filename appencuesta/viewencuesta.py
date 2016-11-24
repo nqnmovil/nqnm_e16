@@ -46,7 +46,7 @@ class EncuestaListar(LoginRequiredMixin, ListView):
         if not(query_nom is None):
             qs = qs.filter(encuestador__usuario__first_name__icontains=query_nom)
         if not(query_num is None or query_num == ''):
-            qs = qs.filter(id=query_num)
+            qs = qs.filter(referencia__icontains=query_num)
 
         return qs
     #almacenar contexto de la búsqueda
