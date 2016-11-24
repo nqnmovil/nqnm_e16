@@ -133,12 +133,10 @@ class Encuesta (models.Model):
   #rango de edad
   JOVEN = 'JO'
   ADULTO = 'A1'
-  ADULTO2 = 'A2'
   ADULTO_MAYOR = 'AM'
   RANGO_EDAD = (
     (JOVEN,'Jóven (18-25 años)'),
-    (ADULTO,'Adulto (25-40 años)'),
-    (ADULTO2,'Adulto II (40-60 años)'),
+    (ADULTO,'Adulto (25-60 años)'),
     (ADULTO_MAYOR,'Adulto mayor (más de 60 años)'),
   )
   #tipo de lugar
@@ -161,19 +159,19 @@ class Encuesta (models.Model):
   hora_realizada = models.TimeField('hora de realización', default= time(16, 00))
   hora_inicio = models.DateTimeField(blank = 'true', null = 'true')
   hora_fin = models.DateTimeField(blank = 'true', null = 'true')
-  momento = models.CharField('Momento de la encuesta',max_length=2, choices=MOMENTO)
+  momento = models.CharField('Momento de la encuesta',max_length=2, choices=MOMENTO, default= ANTES_ASCENDER)
   #perfil del usuario
-  sexo = models.CharField('Sexo',max_length=1, choices=SEXO)
-  rango_edad = models.CharField('Rango de edad',max_length=2, choices=RANGO_EDAD)
+  sexo = models.CharField('1.a. Sexo',max_length=1, choices=SEXO)
+  rango_edad = models.CharField('1.b. Rango de edad',max_length=2, choices=RANGO_EDAD)
   #origen del viaje
   #parahacer:ocultar lugar y parada tanto de origen como destino o dejar que lo carguen en blanco
   origen_lugar = models.ForeignKey(Lugar, related_name='encuesta_origen_lugar', null='true', blank='true')
 
-  origen_motivo = models.ForeignKey(Motivo,related_name='encuesta_origen_motivo', null='true')
+  origen_motivo = models.ForeignKey(Motivo,verbose_name='2.a. Motivo del viaje. Desde',related_name='encuesta_origen_motivo', null='true')
   origen_parada =  models.CharField('Parada de origen (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #destino del viaje
   destino_lugar = models.ForeignKey(Lugar,related_name='encuesta_destino_lugar', null='true', blank='true')
-  destino_motivo = models.ForeignKey(Motivo,related_name='encuesta_destino_motivo', null='true')
+  destino_motivo = models.ForeignKey(Motivo,verbose_name='2.b. Motivo del viaje. Hacia',related_name='encuesta_destino_motivo', null='true')
   destino_parada =  models.CharField('Parada de destino (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #detalles del viaje
   #veces por semana
@@ -185,7 +183,7 @@ class Encuesta (models.Model):
     (TRES_O_MAS, 'Tres o más'),
     (MENOS_DE_TRES, 'Menos de tres'),
   )
-  veces_semana = models.CharField('Veces por semana en que realiza este viaje',max_length=6, choices=VECES_SEMANA)
+  veces_semana = models.CharField('3.a. Veces por semana en que realiza este viaje',max_length=6, choices=VECES_SEMANA)
   #veces por día
   DOS_O_MAS  = '2OMAS'
   MENOS_DE_DOS = 'MENOS2'
@@ -193,7 +191,7 @@ class Encuesta (models.Model):
     (DOS_O_MAS, 'Dos o más'),
     (MENOS_DE_DOS, 'Menos de dos'),
   )
-  veces_dia = models.CharField('Veces por día en que realiza este viaje',max_length=6, choices=VECES_DIA)
+  veces_dia = models.CharField('3.b. Veces por día en que realiza este viaje',max_length=6, choices=VECES_DIA)
   #otros medios de transporte
   NO_OTRO_MEDIO = 'NO'
   OTRA_LINEA = 'OLINEA'
@@ -207,8 +205,8 @@ class Encuesta (models.Model):
     (TAXI_REMIS,'Taxi o Remis'),
     (OTRO,'Otro medio'),
   )
-  otro_medio = models.CharField('Para completar el viaje usa otro medio de transporte?',max_length=6, choices=OTRO_MEDIO)
-  linea = models.ForeignKey(Linea, null='true')
+  otro_medio = models.CharField('4. Para completar el viaje ¿Usa otro medio de transporte?',max_length=6, choices=OTRO_MEDIO)
+  linea = models.ForeignKey(Linea,verbose_name='5. ¿En qué línea de transporte suele viajar?', null='true')
   #calidad del servicio
   MUY_BUENO = 'MB'
   BUENO = 'BU'
@@ -222,12 +220,12 @@ class Encuesta (models.Model):
     (MALO, 'malo'),
     (NS_NC, 'Ns/Nc'),
   )
-  estado_unidad =  models.CharField('Estado general de las unidades',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  comodidad =  models.CharField('Comodidad con la que viaja',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  higiene_unidad =  models.CharField('Higiene de las unidadades',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  trato_choferes =  models.CharField('Nivel de trato y atención recibida por los choferes',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  conduccion_choferes =  models.CharField('Desempeño de los choferes en la conducción',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  info_choferes =  models.CharField('Nivel de información del sistema de transporte de los choferes?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  estado_unidad =  models.CharField('6.a. Estado general de las unidades',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  comodidad =  models.CharField('6.b. Comodidad con la que viaja',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  higiene_unidad =  models.CharField('6.c. Higiene de las unidadades',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  trato_choferes =  models.CharField('7.a. Nivel de trato y atención recibida por los choferes',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  conduccion_choferes =  models.CharField('7.b. Desempeño de los choferes en la conducción',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  info_choferes =  models.CharField('7.c. Nivel de información del sistema de transporte de los choferes?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
   #Interes en servicios anexos
   SI = 'SI'
   NO = 'NO'
@@ -249,6 +247,8 @@ class Encuesta (models.Model):
   APP_CEL_CUANDO_PASA = 'CP'
 
   USA_MEDIOS_INFORMACION = (
+    (SI,'Si'),
+    (NO,'No'),
     (NO_ME_INTERESA,'No. No estoy interesado/a'),
     (NO_LO_CONOZCO,'No. No lo conozco'),
     (WEB_CUANDOPASA,'Si. Página web de cuandopasa.com'),
@@ -257,8 +257,8 @@ class Encuesta (models.Model):
     (MENSAJE_TEXTO,'Si. Mensaje de texto'),
     (CARTELES_INTELIGENTES,'Si. Carteles de información LED'),
  )
-  usa_medio_informacion = models.CharField('¿Utiliza algún medio de información de transporte?',max_length=2, choices=USA_MEDIOS_INFORMACION, default = NO_LO_CONOZCO)
-  usa_trasbordo = models.CharField('¿Utiliza el servicio de trasbordo?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
+  usa_medio_informacion = models.CharField('8. ¿Utiliza algún medio de información de transporte?',max_length=2, choices=USA_MEDIOS_INFORMACION, default = NO_LO_CONOZCO)
+  usa_trasbordo = models.CharField('9. ¿Utiliza el servicio de trasbordo?',max_length=2, choices=INTERES_SERVICIOS_ANEXOS, default = NO)
 
   #paraHacer:tarjeta sube
   #beneficios tarjeta sube
@@ -269,12 +269,13 @@ class Encuesta (models.Model):
   BENEF_SUBE_SI_JUCAID = 'BS_JU'
   SUBE_BENEFICIOS = {
     (BENEF_SUBE_NO,'No'),
+    (SI,'Si'),
     (BENEF_SUBE_SI_ANSES,'Si. ANSES'),
     (BENEF_SUBE_SI_ESCOLAR,'Si. Escolar'),
     (BENEF_SUBE_SI_UNIVERSITARIO,'Si. Universitario'),
     (BENEF_SUBE_SI_JUCAID,'Si. JUCAID'),
   }
-  sube_beneficios = models.CharField('¿Su tarjeta SUBE tiene algún beneficio?',max_length=5, choices=SUBE_BENEFICIOS, default = BENEF_SUBE_NO)
+  sube_beneficios = models.CharField('9.1 ¿Su tarjeta SUBE tiene algún beneficio?',max_length=5, choices=SUBE_BENEFICIOS, default = BENEF_SUBE_NO)
 
   #opinión mejora en servicio
   MEJORO_BASTANTE = 'MB'
@@ -288,13 +289,13 @@ class Encuesta (models.Model):
     (NO_MEJORO,'No mejoró'),
     (NS_NC, 'Ns/Nc'),
   )
-  opinion_servicio = models.CharField('¿En este último tiempo, considera que el servicio brindado por la Empresa?',max_length=2, choices=MEJORA_SERVICIO, default = NS_NC)
-  opinion_trabajo_muni = models.CharField('¿Cómo calificaría el trabajo que está realizando la Municipalidad para el control y mejoramiento del servicio?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
-  sugerencia = models.CharField('¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
+  opinion_servicio = models.CharField('9.2. ¿En este último tiempo, considera que el servicio brindado por la Empresa?',max_length=2, choices=MEJORA_SERVICIO, default = NS_NC)
+  opinion_trabajo_muni = models.CharField('9.3. ¿Cómo calificaría el trabajo que está realizando la Municipalidad para el control y mejoramiento del servicio?',max_length=2, choices=CALIFICA_CALIDAD, default = NS_NC)
+  sugerencia = models.CharField('10. ¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
   activo = models.BooleanField('Encuesta activa',default=True)
 
   def __str__(self):
-    return self.parada_encuesta.numero
+    return self.referencia
   #sólo permito borrado lógico, también proveo lista de encuestas activas
   objects = AdministrarActivos()
   def delete(self):

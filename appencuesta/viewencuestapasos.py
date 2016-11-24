@@ -134,8 +134,8 @@ class EncuestaProcedimiento(LoginRequiredMixin, UpdateView):
 encuesta_perfil_fields = (
 'referencia',
 'sexo','rango_edad',
-'origen_lugar','origen_motivo','origen_parada',
-'destino_lugar','destino_motivo','destino_parada',
+'origen_motivo',  #'origen_lugar','origen_motivo','origen_parada',
+'destino_motivo', #'destino_lugar','destino_motivo','destino_parada',
 'veces_semana','veces_dia',
 'otro_medio','linea'
 )
@@ -167,14 +167,14 @@ class EncuestaPerfilForm(ModelForm):
         'rango_edad',
       ),
       Fieldset('Origen del viaje',
-      'origen_lugar',
+      #'origen_lugar',
       'origen_motivo',
-      'origen_parada',
+      #'origen_parada',
       ),
       Fieldset('Destino del viaje',
-      'destino_lugar',
+      #'destino_lugar',
       'destino_motivo',
-      'destino_parada',
+      #'destino_parada',
       ),
       Fieldset('Detalles del viaje',
       'veces_semana',
@@ -193,6 +193,8 @@ class EncuestaPerfilForm(ModelForm):
     #origen_lugar
     #ok anda --> self.helper['origen_lugar'].wrap(Field, readonly='readonly')
     #ok anda --> print(self.helper.layout[1][0]) #= Div('field_1')
+    """
+    Comento ya que actualmente no se selecciona lugar y parada
     if origenfijo:
       #self.helper.layout[1][0] = Field('origen_lugar', disabled='disabled')
       self.helper['origen_lugar'].wrap(Field, readonly='readonly')
@@ -200,6 +202,7 @@ class EncuestaPerfilForm(ModelForm):
     else:
       self.helper['destino_lugar'].wrap(Field, readonly='readonly')
       self.helper['destino_parada'].wrap(Field, readonly='readonly')
+    """
     super(EncuestaPerfilForm, self).__init__(*args, **kwargs)
 
   class Meta:
