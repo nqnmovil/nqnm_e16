@@ -63,14 +63,19 @@ class Campania (models.Model):
     verbose_name = "Campaña"
     verbose_name_plural = "Campañas"
 
-@python_2_unicode_compatible
+#@python_2_unicode_compatible
 class Encuestador (models.Model):
   usuario = models.ForeignKey(User)
+  activo = models.BooleanField('Encuestador activo',default=True)
   def __str__(self):
     return self.usuario.get_full_name()#self.usuario.first_name
   class Meta:
     verbose_name = "Encuestador"
     verbose_name_plural = "Encuestadores"
+  def delete(self):
+    self.activo = False
+    self.save()
+
 @python_2_unicode_compatible
 class Parada (models.Model):
   numero = models.CharField('Número',max_length=10)
@@ -152,8 +157,8 @@ class Encuesta (models.Model):
   #datos sobre el procedimiento de encuesta
   #nousar esto: id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   referencia = models.CharField('Número de encuesta',max_length=10,blank='true') #autoincremental
-  encuestador = models.ForeignKey('Encuestador',Encuestador, null='true', )
-  parada_encuesta = models.ForeignKey(Parada,verbose_name='Parada', null='true')
+  encuestador = models.ForeignKey('Encuestador',Encuestador, null='true')
+  parada_encuesta = models.ForeignKey(Parada,verbose_name='Parada', null='true', on_delete= models.PROTECT)
   cargaonline = models.BooleanField('Encuesta cargada en línea',default=True)
   dia_realizada = models.DateField('fecha de realización', default=date.today)
   hora_realizada = models.TimeField('hora de realización', default= time(16, 00))
@@ -165,13 +170,13 @@ class Encuesta (models.Model):
   rango_edad = models.CharField('1.b. Rango de edad',max_length=2, choices=RANGO_EDAD)
   #origen del viaje
   #parahacer:ocultar lugar y parada tanto de origen como destino o dejar que lo carguen en blanco
-  origen_lugar = models.ForeignKey(Lugar, related_name='encuesta_origen_lugar', null='true', blank='true')
+  origen_lugar = models.ForeignKey(Lugar, related_name='encuesta_origen_lugar', null='true', blank='true', on_delete= models.PROTECT)
 
-  origen_motivo = models.ForeignKey(Motivo,verbose_name='2.a. Motivo del viaje. Desde',related_name='encuesta_origen_motivo', null='true')
+  origen_motivo = models.ForeignKey(Motivo,verbose_name='2.a. Motivo del viaje. Desde',related_name='encuesta_origen_motivo', null='true', on_delete= models.PROTECT)
   origen_parada =  models.CharField('Parada de origen (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #destino del viaje
-  destino_lugar = models.ForeignKey(Lugar,related_name='encuesta_destino_lugar', null='true', blank='true')
-  destino_motivo = models.ForeignKey(Motivo,verbose_name='2.b. Motivo del viaje. Hacia',related_name='encuesta_destino_motivo', null='true')
+  destino_lugar = models.ForeignKey(Lugar,related_name='encuesta_destino_lugar', null='true', blank='true', on_delete= models.PROTECT)
+  destino_motivo = models.ForeignKey(Motivo,verbose_name='2.b. Motivo del viaje. Hacia',related_name='encuesta_destino_motivo', null='true', on_delete= models.PROTECT)
   destino_parada =  models.CharField('Parada de destino (opcional)',max_length=10, blank='true') #solo se carga si el tipo de lugar es parada
   #detalles del viaje
   #veces por semana
@@ -206,7 +211,7 @@ class Encuesta (models.Model):
     (OTRO,'Otro medio'),
   )
   otro_medio = models.CharField('4. Para completar el viaje ¿Usa otro medio de transporte?',max_length=6, choices=OTRO_MEDIO)
-  linea = models.ForeignKey(Linea,verbose_name='5. ¿En qué línea de transporte suele viajar?', null='true')
+  linea = models.ForeignKey(Linea,verbose_name='5. ¿En qué línea de transporte suele viajar?', null='true', on_delete= models.PROTECT)
   #calidad del servicio
   MUY_BUENO = 'MB'
   BUENO = 'BU'
@@ -294,6 +299,14 @@ class Encuesta (models.Model):
   sugerencia = models.CharField('10. ¿Tiene alguna sugerencia o comentario?',max_length=140, blank='true')
   activo = models.BooleanField('Encuesta activa',default=True)
 
+  ESTADO_COMPLETA = 'COM'
+  ESTADO_INCOMPLETA = 'INC'
+  ESTADOS = (
+    (ESTADO_COMPLETA, 'Si. Encuesta completa'),
+    (ESTADO_INCOMPLETA, 'No. Terminaré de cargarla más adelante'),
+  )
+  estado = models.CharField('¿Da por finalizada la carga de la encuesta?',max_length=3, choices=ESTADOS, default = ESTADO_INCOMPLETA)
+
   def __str__(self):
     return self.referencia
   #sólo permito borrado lógico, también proveo lista de encuestas activas
@@ -308,11 +321,11 @@ class Encuesta (models.Model):
       self.referencia = completarConCeros( sigNumero('encuesta_campania_0001'), 5)
 
       unaparada = Lugar.objects.get(tipo = PARADA) #debe haber un solo Lugar de tipo PARADA
-      #Valores por defecto de paradas de origen y destino
-      self.origen_parada = self.parada_encuesta.numero if self.momento == ANTES_ASCENDER else '' #Si se releva al subir, uso la parada de la encuesta como origen
-      self.origen_lugar = unaparada if self.momento == ANTES_ASCENDER else None
-      self.destino_parada = self.parada_encuesta.numero if self.momento == LUEGO_DESCENDER else '' #Si se releva al bajar, uso la parada de la encuesta como destino
-      self.destino_lugar = unaparada if self.momento == LUEGO_DESCENDER else None
+      #Valores por defecto de paradas de origen y destino. Se inhabilita por carga manual
+      #self.origen_parada = self.parada_encuesta.numero if self.momento == ANTES_ASCENDER else '' #Si se releva al subir, uso la parada de la encuesta como origen
+      #self.origen_lugar = unaparada if self.momento == ANTES_ASCENDER else None
+      #self.destino_parada = self.parada_encuesta.numero if self.momento == LUEGO_DESCENDER else '' #Si se releva al bajar, uso la parada de la encuesta como destino
+      #self.destino_lugar = unaparada if self.momento == LUEGO_DESCENDER else None
 
     super(Encuesta, self).save(*args, **kwargs) # Call the "real" save() method.
 

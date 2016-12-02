@@ -45,7 +45,8 @@ class EncuestaProcedimientoForm(ModelForm):
       html_prompt_paradas = ""
       html_link_paradas = ""
       #al modificar inactivo parada, y momento de encuesta
-      html_inhabilitar_select = """
+      html_inhabilitar_select = '' #Desactivado por carga manual
+      """ script desactivado:
         <script type="text/javascript">
           $('#id_parada_encuesta option:not(:selected)').attr('disabled',true);
           $('#id_momento option:not(:selected)').attr('disabled',true);
@@ -83,9 +84,10 @@ class EncuestaProcedimientoForm(ModelForm):
     encuestador = Encuestador.objects.get(usuario__id = user.id)
     self.fields['encuestador'].queryset= Encuestador.objects.filter(id=encuestador.id)
     self.fields['encuestador'].initial = encuestador
-    if modo == 'UPD': #si actualiza deshabilitar campos para evitar inconsistencia
-      self.helper['parada_encuesta'].wrap(Field, readonly='readonly')
-      self.helper['momento'].wrap(Field, readonly='readonly')
+    #Desactivo estos readonly por carga manual
+    #if modo == 'UPD': #si actualiza deshabilitar campos para evitar inconsistencia
+    #  self.helper['parada_encuesta'].wrap(Field, readonly='readonly')
+    #  self.helper['momento'].wrap(Field, readonly='readonly')
 
   class Meta:
     model = Encuesta
@@ -134,7 +136,7 @@ class EncuestaProcedimiento(LoginRequiredMixin, UpdateView):
 encuesta_perfil_fields = (
 'referencia',
 'sexo','rango_edad',
-'origen_motivo',  #'origen_lugar','origen_motivo','origen_parada',
+'origen_motivo',  'origen_lugar', #'origen_motivo','origen_parada',
 'destino_motivo', #'destino_lugar','destino_motivo','destino_parada',
 'veces_semana','veces_dia',
 'otro_medio','linea'
@@ -143,19 +145,20 @@ encuesta_perfil_fieldSet = ('Perfil del usuario',) + encuesta_perfil_fields
 
 class EncuestaPerfilForm(ModelForm):
   def __init__(self,user, selfpk,origenfijo, *args, **kwargs):
-
-    if origenfijo:
-      html_inhabilitar_select = """
-        <script type="text/javascript">
-          $('#id_origen_lugar option:not(:selected)').attr('disabled',true);
-        </script>
-      """
-    else:
-      html_inhabilitar_select = """
-        <script type="text/javascript">
-          $('#id_destino_lugar option:not(:selected)').attr('disabled',true);
-        </script>
-      """
+    #Desactivado por carga manual
+    html_inhabilitar_select = ''
+    #if origenfijo:
+    #  html_inhabilitar_select = """
+    #    <script type="text/javascript">
+    #      $('#id_origen_lugar option:not(:selected)').attr('disabled',true);
+    #    </script>
+    #  """
+    #else:
+    #  html_inhabilitar_select = """
+    #    <script type="text/javascript">
+    #      $('#id_destino_lugar option:not(:selected)').attr('disabled',true);
+    #    </script>
+    #  """
 
     self.helper = FormHelper()
     self.helper.form_class = 'form-horizontal'
@@ -167,7 +170,7 @@ class EncuestaPerfilForm(ModelForm):
         'rango_edad',
       ),
       Fieldset('Origen del viaje',
-      #'origen_lugar',
+      'origen_lugar',
       'origen_motivo',
       #'origen_parada',
       ),
@@ -239,6 +242,7 @@ encuesta_calidad_fields = (
 'sube_beneficios',
 'opinion_servicio', 'opinion_trabajo_muni',
 'sugerencia',
+'estado',
 )
 encuesta_calidad_fieldSet = ('Calidad del servicio',) + encuesta_calidad_fields
 
@@ -269,6 +273,7 @@ class EncuestaCalidadForm(ModelForm):
         'opinion_servicio',
         'opinion_trabajo_muni',
         'sugerencia',
+        'estado',
       ),
       FormActions(
         StrictButton('Volver sin guardar',

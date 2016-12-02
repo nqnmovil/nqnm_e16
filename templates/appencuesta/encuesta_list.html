@@ -23,6 +23,7 @@
 				<th>Parada de encuesta</th>
 				<th>Día</th>
 				<th>Hora</th>
+				<th>Estado</th>
 
       </tr>
     </thead>
@@ -36,7 +37,7 @@
 		<td>{{ encuesta.parada_encuesta }}</td>
 		<td>{{ encuesta.dia_realizada }}</td>
 		<td>{{ encuesta.hora_realizada }}</td>
-
+		<th>{{ encuesta.estado }}</th>
 	</tr>
     {% endfor %}
     </tbody>

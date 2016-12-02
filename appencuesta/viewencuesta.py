@@ -18,6 +18,7 @@ encuesta_fields = (
 'cargaonline',
 'dia_realizada',
 'momento',
+'estado',
 )
 
 from .models import Encuesta
