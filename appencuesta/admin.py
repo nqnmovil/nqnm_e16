@@ -15,5 +15,10 @@ admin.site.register(Parada)
 admin.site.register(Linea)
 admin.site.register(Lugar)
 admin.site.register(Motivo)
-admin.site.register(Encuesta)
 admin.site.register(Numerador)
+
+#admin.site.register(Encuesta)
+class EncuestaAdmin(admin.ModelAdmin):
+  list_display = ('referencia','encuestador','parada_encuesta','dia_realizada','activo','hora_realizada','estado')
+
+admin.site.register(Encuesta, EncuestaAdmin)
